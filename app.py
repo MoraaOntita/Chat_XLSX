@@ -1,4 +1,6 @@
 import pandas as pd
+import os
+from dotenv import load_dotenv
 import streamlit as st
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -6,6 +8,11 @@ from langchain_groq import ChatGroq
 from langchain_experimental.agents.agent_toolkits import create_csv_agent
 from langchain.tools import Tool
 from langchain_experimental.tools.python.tool import PythonREPLTool
+
+
+# Load .env file
+load_dotenv()
+
 
 # Initialize the agent
 def initialize_agent(excel_file):
@@ -15,7 +22,8 @@ def initialize_agent(excel_file):
     df_excel.to_csv(csv_file_path, index=False)
 
     # Initialize LLM
-    groq_api = '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'
+    # Get API Key from environment variable
+    groq_api = os.getenv("GROQ_API_KEY")
     llm = ChatGroq(temperature=0, model="llama3-70b-8192", api_key=groq_api)
 
     # Include tools for calculations and Python code execution
